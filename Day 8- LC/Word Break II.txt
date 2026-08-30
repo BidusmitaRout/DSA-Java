@@ -1,0 +1,44 @@
+import java.util.*;
+
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        return solve(s, wordDict, 0, new HashMap<>());
+    }
+
+    public List<String> solve(String s, List<String> wordDict, int start, HashMap<Integer, List<String>> memo) {
+
+        if (start == s.length()) {
+            List<String> list = new ArrayList<>();
+            list.add("");
+            return list;
+        }
+
+        if (memo.containsKey(start)) {
+            return memo.get(start);
+        }
+
+        List<String> result = new ArrayList<>();
+
+        for (int end = start + 1; end <= s.length(); end++) {
+
+            String word = s.substring(start, end);
+
+            if (wordDict.contains(word)) {
+
+                List<String> remaining = solve(s, wordDict, end, memo);
+
+                for (String str : remaining) {
+
+                    if (str.equals("")) {
+                        result.add(word);
+                    } else {
+                        result.add(word + " " + str);
+                    }
+                }
+            }
+        }
+
+        memo.put(start, result);
+        return result;
+    }
+}
